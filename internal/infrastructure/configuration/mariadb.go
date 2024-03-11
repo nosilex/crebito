@@ -4,8 +4,9 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
-	"github.com/nosilex/crebito/pkg/helper"
 	"os"
+
+	"github.com/nosilex/crebito/pkg/helper"
 )
 
 func newMariaDB() (*sql.DB, error) {
