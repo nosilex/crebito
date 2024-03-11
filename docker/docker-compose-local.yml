@@ -1,0 +1,35 @@
+version: '3.9'
+services:
+  db:
+    image: mariadb:latest
+    container_name: rinha-db
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=rinhabackend
+      - MYSQL_USER=rinha
+      - MYSQL_PASSWORD=secret
+      - TZ=America/Sao_Paulo
+    ports:
+      - "3306:3306"
+    volumes:
+      - "./resources/database/my.cnf:/etc/mysql/my.cnf"
+      - "./resources/database/ddl.sql:/docker-entrypoint-initdb.d/1.sql"
+      - "./resources/database/dml.sql:/docker-entrypoint-initdb.d/2.sql"
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "healthcheck.sh",
+          "--su-mysql",
+          "--connect",
+          "--innodb_initialized"
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
+
+networks:
+  default:
+    driver: bridge
+    name: rinha-network
